@@ -8,12 +8,12 @@ public class PlayerHealth : MonoBehaviour
 
     public static bool isDead;
 
-    private void Start()
+    public void Start()
     {
         currentHealth = startHealth;
     }
 
-    private void Update()
+    public void Update()
     {
         if (currentHealth <= 0 && !isDead)
         {
