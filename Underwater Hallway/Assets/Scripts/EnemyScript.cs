@@ -7,12 +7,14 @@ using UnityEngine.AI;
 
 public class EnemyScript : MonoBehaviour
 {
-   [Range(0,50)] [SerializeField] float attackRange = 5, sightRange = 20, timeBetweenAttacks =3;
+    //Variables for stats
+    [Range(0,50)] [SerializeField] float attackRange = 5, sightRange = 20, timeBetweenAttacks = 3;
     [Range(0, 20)] [SerializeField] int power;
 
     private NavMeshAgent thisEnemy;
     private Transform playerPos;
 
+    //Variables for animations
     Animator _animator;
     string _currentState;
     const string ENEMY_IDLE = "Enemy_Idle";
@@ -22,18 +24,28 @@ public class EnemyScript : MonoBehaviour
     private bool isAttacking;
     private bool isIdling = false;
 
+    //Variables for stun mechanic
+    //[SerializeField] private LayerMask stunLayer;
+    //[SerializeField] private GameObject stunBox;
+    public bool isStunned = false;
+    public bool stunCooldown = false;
+    public float cooldownRemaining = 5f;
+    public float stunRemaining = 7f;
+
+
     private void Start()
     {
         thisEnemy = GetComponent<NavMeshAgent>();
         playerPos = FindObjectOfType<PlayerHealth>().transform;
         _animator = gameObject.GetComponent<Animator>();
+
     }
 
     private void Update()
     {
         float distanceFromPlayer = Vector3.Distance(playerPos.position, this.transform.position); // distance between playah and enemy
 
-        if (distanceFromPlayer <= sightRange && distanceFromPlayer > attackRange && !PlayerHealth.isDead )
+        if ((distanceFromPlayer <= sightRange && distanceFromPlayer > attackRange && !PlayerHealth.isDead) && (!isStunned))
         {
             isAttacking = false;
             thisEnemy.isStopped = false;
@@ -44,15 +56,25 @@ public class EnemyScript : MonoBehaviour
             isIdling = false;
 
         }
-        if (distanceFromPlayer > sightRange && !PlayerHealth.isDead && !isIdling)
+        if ((distanceFromPlayer > sightRange && !PlayerHealth.isDead && !isIdling) || (isStunned))
         {
-            Debug.Log("Enemy should idle");
-            thisEnemy.isStopped = true;
-            StopAllCoroutines();
-            IdleMode();
+            if (!isStunned) //normal version
+            {
+                Debug.Log("Enemy should idle");
+                thisEnemy.isStopped = true;
+                StopAllCoroutines();
+                IdleMode();
+            }
+            if (isStunned) //stunned version
+            {
+                Debug.Log("Enemy should Stun");
+                thisEnemy.isStopped = true;
+                StopAllCoroutines();
+                IdleMode();
+            }
         }
 
-        if (distanceFromPlayer <= attackRange && !isAttacking && !PlayerHealth.isDead)
+        if ((distanceFromPlayer <= attackRange && !isAttacking && !PlayerHealth.isDead) && (!isStunned))
         {
             thisEnemy.isStopped = true; //stops enemy
             ChangeAnimationState(ENEMY_ATTACK);
@@ -65,6 +87,25 @@ public class EnemyScript : MonoBehaviour
             thisEnemy.isStopped = true;
             ChangeAnimationState(ENEMY_IDLE);
         }
+
+        //timer for cooldown
+        if ((stunCooldown) && (cooldownRemaining > 0)) { cooldownRemaining -= Time.deltaTime; } //counts down
+        if ((stunCooldown) && (cooldownRemaining <= 0)) { stunCooldown = false; } //ends at 0
+        if (!stunCooldown) { cooldownRemaining = 5f; } //reset timer
+        //timer for how long stun lasts
+        if ((isStunned) && (stunRemaining > 0))
+        {
+            stunRemaining -= Time.deltaTime;
+        }
+        if ((isStunned) && (stunRemaining <= 0))
+        {
+            isStunned = false;
+        }
+        if (!isStunned)
+        {
+            stunRemaining = 7f;
+        }
+
     }
 
     private void IdleMode()
@@ -102,10 +143,29 @@ public class EnemyScript : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(this.transform.position, attackRange);
     }
-
-
-
-
+    //stun mechanic
+    private void OnTriggerEnter(Collider other) // if enter collision
+    {
+        if(other.gameObject.CompareTag("Stun"))
+        {
+            //stun if tree
+            if(isStunned) //if stun is already happening
+            {
+                //keep stun as is
+                return;
+            }
+            if((!stunCooldown) && (!isStunned)) //if cooldown is done AND enemy isn't already stunned
+            {
+                //trigger stun
+                isStunned = true;
+            }
+            if((stunCooldown)) //if cooldown is still going
+            {
+                //prevent stun
+                isStunned = false;
+            }
+        }
+    }
     ///animation mumbo jumbo
     ///
     private void ChangeAnimationState(string newState)

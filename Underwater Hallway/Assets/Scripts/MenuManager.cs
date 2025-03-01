@@ -70,6 +70,7 @@ public class MenuManager : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
+        FindObjectOfType<flashlight>().enabled = false;
         FindObjectOfType<PlayerMovement>().enabled = false;
         FindObjectOfType<CharacterController>().enabled = false;
     }
@@ -86,6 +87,7 @@ public class MenuManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
+        FindObjectOfType<flashlight>().enabled = true;
         FindObjectOfType<PlayerMovement>().enabled = true;
         FindObjectOfType<CharacterController>().enabled = true;
     }
