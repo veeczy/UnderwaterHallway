@@ -14,6 +14,9 @@ public class keyScript : MonoBehaviour
     public bool keyReach = false;
     public bool chestReach = false;
 
+    public GameObject pickupText;
+    public GameObject chestOpenText;
+    public GameObject winChestText;
     // Variables for VFX
     //public AudioSource keySource;
     //public GameObject keyText;
@@ -45,12 +48,23 @@ public class keyScript : MonoBehaviour
             if(chestReach && !hasKey) // if chest is in reach and you don't have the key
             {
                 Debug.Log("You don't have the key.");
+                chestOpenText.SetActive(true);
             }
             if(chestReach && hasKey)
             {
                 Debug.Log("Player opened chest.");
                 // play animation
                 winCondition = true;
+            }
+            
+            if (hasKey == true)
+            {
+                pickupText.SetActive(false);
+            }
+
+            if (hasKey && chestReach)
+            {
+                winChestText.SetActive(true);
             }
         }
     }
@@ -71,6 +85,23 @@ public class keyScript : MonoBehaviour
             //if(!hasKey) { chestnokeyText.SetActive(true); } // vfx to indicate it needs a key
             //if(hasKey) {chestkeyText.SetActive(true); } // vfx to indicate it can be opened up
         }
+
+        if (keyReach == true)
+        {
+            pickupText.SetActive(true);
+        }
+
+        if (chestReach == true)
+        {
+            chestOpenText.SetActive(true);
+        }
+
+        if (chestReach && hasKey)
+        {
+            chestOpenText.SetActive(false);
+            winChestText.SetActive(true);
+        }
+
     }
 
     public void OnTriggerExit(Collider other) // what is out of range of sight
@@ -85,9 +116,19 @@ public class keyScript : MonoBehaviour
         if (other.gameObject.CompareTag("Chest")) // if chest is out of sight
         {
             chestReach = false;
-            Debug.Log("Chest in sight.");
+            Debug.Log("Chest out of sight.");
             //if(!hasKey) { chestnokeyText.SetActive(true); } // remove vfx to indicate it needs a key
             //if(hasKey) {chestkeyText.SetActive(true); } // remove vfx to indicate it can be opened up
+        }
+
+        if (keyReach == false) 
+        {
+            pickupText.SetActive(false);
+        }
+
+        if (chestReach == false)
+        {
+            chestOpenText.SetActive(false);
         }
     }
 }

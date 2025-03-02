@@ -12,6 +12,8 @@ public class PlayerHealth : MonoBehaviour
     private void Start()
     {
         currentHealth = startHealth;
+        isDead = false;
+        loseCondition = false;
     }
 
     private void Update()
@@ -19,7 +21,7 @@ public class PlayerHealth : MonoBehaviour
         if (currentHealth <= 0 && !isDead)
         {
             isDead = true;
-            Debug.Log("the player has dieded");
+            Debug.Log("the player has died");
         }
         if(isDead) { loseCondition = true; }
     }
