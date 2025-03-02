@@ -25,12 +25,14 @@ public class EnemyScript : MonoBehaviour
     private bool isIdling = false;
 
     //Variables for stun mechanic
-    //[SerializeField] private LayerMask stunLayer;
-    //[SerializeField] private GameObject stunBox;
+    [SerializeField] public ParticleSystem stunParticles;
     public bool isStunned = false;
     public bool stunCooldown = false;
-    public float cooldownRemaining = 5f;
-    public float stunRemaining = 7f;
+    public float cooldownRemaining = 10f;
+    public float stunRemaining = 4.5f;
+    public bool cheatOn = false; 
+    //[SerializeField] private LayerMask stunLayer;
+    //[SerializeField] private GameObject stunBox;
 
 
     private void Start()
@@ -45,7 +47,7 @@ public class EnemyScript : MonoBehaviour
     {
         float distanceFromPlayer = Vector3.Distance(playerPos.position, this.transform.position); // distance between playah and enemy
 
-        if ((distanceFromPlayer <= sightRange && distanceFromPlayer > attackRange && !PlayerHealth.isDead) && (!isStunned))
+            if ((distanceFromPlayer <= sightRange && distanceFromPlayer > attackRange && !PlayerHealth.isDead) && (!isStunned))
         {
             isAttacking = false;
             thisEnemy.isStopped = false;
@@ -67,6 +69,7 @@ public class EnemyScript : MonoBehaviour
             }
             if (isStunned) //stunned version
             {
+                //stunParticles.Play(); // play particles
                 Debug.Log("Enemy should Stun");
                 thisEnemy.isStopped = true;
                 StopAllCoroutines();
@@ -91,7 +94,8 @@ public class EnemyScript : MonoBehaviour
         //timer for cooldown
         if ((stunCooldown) && (cooldownRemaining > 0)) { cooldownRemaining -= Time.deltaTime; } //counts down
         if ((stunCooldown) && (cooldownRemaining <= 0)) { stunCooldown = false; } //ends at 0
-        if (!stunCooldown) { cooldownRemaining = 5f; } //reset timer
+        if (!stunCooldown) { cooldownRemaining = 10f; } //reset timer
+        if(cheatOn) { stunCooldown = false; }
         //timer for how long stun lasts
         if ((isStunned) && (stunRemaining > 0))
         {
@@ -103,7 +107,7 @@ public class EnemyScript : MonoBehaviour
         }
         if (!isStunned)
         {
-            stunRemaining = 7f;
+            stunRemaining = 4.5f;
         }
 
     }
@@ -116,7 +120,7 @@ public class EnemyScript : MonoBehaviour
 
     private void ChasePlayer()
     {
-        
+        //stunParticles.Stop();
         ChangeAnimationState(ENEMY_RUN);
         
         
@@ -143,6 +147,7 @@ public class EnemyScript : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(this.transform.position, attackRange);
     }
+
     //stun mechanic
     private void OnTriggerEnter(Collider other) // if enter collision
     {
@@ -157,15 +162,24 @@ public class EnemyScript : MonoBehaviour
             if((!stunCooldown) && (!isStunned)) //if cooldown is done AND enemy isn't already stunned
             {
                 //trigger stun
+                stunParticles.Play();
                 isStunned = true;
+                stunCooldown = true;
             }
-            if((stunCooldown)) //if cooldown is still going
+            if((stunCooldown) && (!isStunned)) //if cooldown is still going
             {
                 //prevent stun
                 isStunned = false;
             }
         }
     }
+
+    //cooldown cheat
+    public void cooldownCheat()
+    {
+        cheatOn = !cheatOn;
+    }
+
     ///animation mumbo jumbo
     ///
     private void ChangeAnimationState(string newState)
