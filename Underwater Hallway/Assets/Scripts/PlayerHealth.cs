@@ -7,6 +7,7 @@ public class PlayerHealth : MonoBehaviour
     [Range(0, 200)] public int startHealth = 100, currentHealth;
 
     public static bool isDead;
+    public bool loseCondition = false;
 
     private void Start()
     {
@@ -20,6 +21,7 @@ public class PlayerHealth : MonoBehaviour
             isDead = true;
             Debug.Log("the player has dieded");
         }
+        if(isDead) { loseCondition = true; }
     }
 
     public void TakeDamage(int amount)

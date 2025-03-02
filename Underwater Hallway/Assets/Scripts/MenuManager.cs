@@ -16,11 +16,21 @@ public class MenuManager : MonoBehaviour
     private GameObject lastActiveMenu;
     private bool isPaused = false;
 
+    public GameObject key;
+    public bool winCondition;
+    public GameObject player;
+    public bool loseCondition;
+    //public AudioSource winSource;
+    //public AudioSource loseSource;
+
     // Start is called before the first frame update
     void Start()
     {
         OpenMenu(mainMenu);
         Time.timeScale = 0f;
+
+        bool winCondition = key.GetComponent<keyScript>().winCondition;
+        bool loseCondition = player.GetComponent<PlayerHealth>().loseCondition;
     }
 
     void Update()
@@ -34,6 +44,17 @@ public class MenuManager : MonoBehaviour
                 OpenMenu(pauseMenu);
             else
                 CloseMenus();
+        }
+
+        if(winCondition) //win
+        {
+            //winSource.Play(); // win vfx
+            winScreen.SetActive(true);
+        }
+        if(loseCondition) //lose
+        {
+            //loseSource.Play(); // lose vfx
+            loseScreen.SetActive(true);
         }
     }
 
