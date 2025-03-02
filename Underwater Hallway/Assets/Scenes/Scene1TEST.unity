@@ -1957,6 +1957,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startHealth: 100
   currentHealth: 0
+  loseCondition: 0
+  playSound: 0
+  loseSource: {fileID: 0}
 --- !u!1 &1628971138
 GameObject:
   m_ObjectHideFlags: 0
