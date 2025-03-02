@@ -8,12 +8,15 @@ public class PlayerHealth : MonoBehaviour
 
     public static bool isDead;
     public bool loseCondition = false;
+    public int playSound;
+    public AudioSource loseSource;
 
     private void Start()
     {
         currentHealth = startHealth;
         isDead = false;
         loseCondition = false;
+        playSound = 0;
     }
 
     private void Update()
@@ -22,12 +25,14 @@ public class PlayerHealth : MonoBehaviour
         {
             isDead = true;
             Debug.Log("the player has died");
+            loseSource.Play();
         }
         if(isDead) { loseCondition = true; }
     }
 
     public void TakeDamage(int amount)
     {
+        //damageSource.Play();
         currentHealth -= amount;
     }
 

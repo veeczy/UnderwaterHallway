@@ -23,6 +23,7 @@ public class EnemyScript : MonoBehaviour
 
     private bool isAttacking;
     private bool isIdling = false;
+    public AudioSource damageSource;
 
     //Variables for stun mechanic
     [SerializeField] public ParticleSystem stunParticles;
@@ -47,7 +48,7 @@ public class EnemyScript : MonoBehaviour
     {
         float distanceFromPlayer = Vector3.Distance(playerPos.position, this.transform.position); // distance between playah and enemy
 
-            if ((distanceFromPlayer <= sightRange && distanceFromPlayer > attackRange && !PlayerHealth.isDead) && (!isStunned))
+            if ((distanceFromPlayer <= sightRange && distanceFromPlayer > attackRange && !PlayerHealth.isDead) && (!isStunned) && (!isAttacking))
         {
             isAttacking = false;
             thisEnemy.isStopped = false;
@@ -130,12 +131,10 @@ public class EnemyScript : MonoBehaviour
     private IEnumerator AttackPlayer()
     {
         isAttacking = true;
-        
-
+        damageSource.Play();
         yield return new WaitForSeconds(timeBetweenAttacks);
-
         FindObjectOfType<PlayerHealth>().TakeDamage(power);
-
+        
         isAttacking = false;
     }
 

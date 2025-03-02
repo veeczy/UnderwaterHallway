@@ -18,7 +18,8 @@ public class keyScript : MonoBehaviour
     public GameObject chestOpenText;
     public GameObject winChestText;
     // Variables for VFX
-    //public AudioSource keySource;
+    public AudioSource keySource;
+    public AudioSource winSource;
     //public GameObject keyText;
     //public GameObject chestkeyText;
     //public GameObject chestnokeyText;
@@ -42,7 +43,7 @@ public class keyScript : MonoBehaviour
             {
                 Debug.Log("Key is picked up.");
                 Destroy(key);
-                //keySource.Play(); // audio for picking up key
+                keySource.Play(); // audio for picking up key
                 hasKey = true;
             }
             if(chestReach && !hasKey) // if chest is in reach and you don't have the key
@@ -55,6 +56,7 @@ public class keyScript : MonoBehaviour
                 Debug.Log("Player opened chest.");
                 // play animation
                 winCondition = true;
+                winSource.Play();
             }
             
             if (hasKey == true)

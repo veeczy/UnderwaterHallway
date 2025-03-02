@@ -8,6 +8,7 @@ public class flashlight : MonoBehaviour
     [SerializeField] GameObject flashlightLight;
     public KeyCode flashlightKey = KeyCode.Mouse0;
     private bool flashlightActive = false;
+    public AudioSource flashlightSource;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +24,7 @@ public class flashlight : MonoBehaviour
         if (Input.GetKeyDown(flashlightKey)) // flip switch for it on/off
         {
             flashlightActive = !flashlightActive;
+            flashlightSource.Play();
         }
 
         if (flashlightActive) //if on
