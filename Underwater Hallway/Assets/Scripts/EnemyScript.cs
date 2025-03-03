@@ -8,7 +8,7 @@ using UnityEngine.AI;
 public class EnemyScript : MonoBehaviour
 {
     //Variables for stats
-    [Range(0,50)] [SerializeField] float attackRange = 5, sightRange = 20, timeBetweenAttacks = 3;
+    [Range(0,50)] [SerializeField] float attackRange = 5, sightRange = 20, timeBetweenAttacks = 3, animDelay = 1;
     [Range(0, 20)] [SerializeField] int power;
 
     private NavMeshAgent thisEnemy;
@@ -25,13 +25,15 @@ public class EnemyScript : MonoBehaviour
     private bool isIdling = false;
     public AudioSource damageSource;
 
+
     //Variables for stun mechanic
     [SerializeField] public ParticleSystem stunParticles;
     public bool isStunned = false;
     public bool stunCooldown = false;
     public float cooldownRemaining = 10f;
     public float stunRemaining = 4.5f;
-    public bool cheatOn = false; 
+    public bool cheatOn = false;
+    public float stunRatio;
     //[SerializeField] private LayerMask stunLayer;
     //[SerializeField] private GameObject stunBox;
 
@@ -97,19 +99,22 @@ public class EnemyScript : MonoBehaviour
         if ((stunCooldown) && (cooldownRemaining <= 0)) { stunCooldown = false; } //ends at 0
         if (!stunCooldown) { cooldownRemaining = 10f; } //reset timer
         if(cheatOn) { stunCooldown = false; }
+        stunRatio = cooldownRemaining / 10f; //the timer as a percentage for the UI circle
+
         //timer for how long stun lasts
-        if ((isStunned) && (stunRemaining > 0))
+        if ((isStunned) && (stunRemaining > 0)) //if stunned and timer not at zero
         {
-            stunRemaining -= Time.deltaTime;
+            stunRemaining -= Time.deltaTime; //counts down
         }
-        if ((isStunned) && (stunRemaining <= 0))
+        if ((isStunned) && (stunRemaining <= 0)) //if stunned and timer runs out
         {
-            isStunned = false;
+            isStunned = false; //stun removed
         }
-        if (!isStunned)
+        if (!isStunned) //if not stunned (timer ended)
         {
-            stunRemaining = 4.5f;
+            stunRemaining = 4.5f; //reset timer
         }
+        
 
     }
 
@@ -131,10 +136,10 @@ public class EnemyScript : MonoBehaviour
     private IEnumerator AttackPlayer()
     {
         isAttacking = true;
+        yield return new WaitForSeconds(animDelay);
         damageSource.Play();
-        yield return new WaitForSeconds(timeBetweenAttacks);
         FindObjectOfType<PlayerHealth>().TakeDamage(power);
-        
+        yield return new WaitForSeconds(timeBetweenAttacks);
         isAttacking = false;
     }
 

@@ -2,20 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
+    //misc UI variables
     public GameObject mainMenu;
     public GameObject aboutMenu;
     public GameObject optionsMenu;
     public GameObject pauseMenu;
-    public GameObject equipment;
-    public GameObject loseScreen;
-    public GameObject winScreen;
 
     private GameObject lastActiveMenu;
     private bool isPaused = false;
 
+    //win lose variables
+    public GameObject loseScreen;
+    public GameObject winScreen;
     public GameObject key;
     public bool winCondition;
     public GameObject player;
@@ -30,6 +32,12 @@ public class MenuManager : MonoBehaviour
     public GameObject health3; //60 health
     public GameObject health4; //80 health
     public GameObject health5; //100 health (full)
+
+    //stunHUD variables
+    public GameObject equipment;
+    public Image IMG;
+    public float stunRatio;
+    public GameObject enemy;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +57,7 @@ public class MenuManager : MonoBehaviour
         winCondition = key.GetComponent<keyScript>().winCondition;
         loseCondition = player.GetComponent<PlayerHealth>().loseCondition;
         currentHealth = player.GetComponent<PlayerHealth>().currentHealth;
+        stunRatio = enemy.GetComponent<EnemyScript>().stunRatio;
     }
 
     void Update()
@@ -88,6 +97,8 @@ public class MenuManager : MonoBehaviour
         if (player.GetComponent<PlayerHealth>().currentHealth <= 40) { health3.SetActive(false); }
         if (player.GetComponent<PlayerHealth>().currentHealth <= 20) { health2.SetActive(false); }
         if (player.GetComponent<PlayerHealth>().currentHealth <= 0) { health1.SetActive(false); }
+
+        IMG.fillAmount = (enemy.GetComponent<EnemyScript>().stunRatio); // fill for flashlight HUD
 
     }
 
