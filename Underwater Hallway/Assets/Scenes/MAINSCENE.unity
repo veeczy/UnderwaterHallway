@@ -20423,6 +20423,7 @@ MonoBehaviour:
   winCondition: 0
   player: {fileID: 1544717944}
   loseCondition: 0
+  bgmSource: {fileID: 0}
   currentHealth: 0
   healthIndicator: {fileID: 1922601054}
   health1: {fileID: 407826405}
@@ -34596,6 +34597,10 @@ PrefabInstance:
     - target: {fileID: 8896626922434862886, guid: 1bc98e06363f36b42be5c4e42262dced, type: 3}
       propertyPath: ShapeModule.m_Rotation.z
       value: 0.0011132992
+      objectReference: {fileID: 0}
+    - target: {fileID: 8896626922434862886, guid: 1bc98e06363f36b42be5c4e42262dced, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
       objectReference: {fileID: 0}
     - target: {fileID: 8896626922434862886, guid: 1bc98e06363f36b42be5c4e42262dced, type: 3}
       propertyPath: InitialModule.maxNumParticles
