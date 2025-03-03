@@ -35503,7 +35503,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1694318407, guid: e4bcd8cba27c9e44782d82597b9cd0f0, type: 3}
       propertyPath: sightRange
-      value: 6.4
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1694318407, guid: e4bcd8cba27c9e44782d82597b9cd0f0, type: 3}
       propertyPath: damageSource
