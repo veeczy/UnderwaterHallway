@@ -77,6 +77,7 @@ public class keyScript : MonoBehaviour
         {
             keyReach = true;
             Debug.Log("Key in sight.");
+            pickupText.SetActive(true);
             //keyText.SetActive(true); // vfx to indicate it can be picked up
         }
 
@@ -86,11 +87,6 @@ public class keyScript : MonoBehaviour
             Debug.Log("Chest in sight.");
             //if(!hasKey) { chestnokeyText.SetActive(true); } // vfx to indicate it needs a key
             //if(hasKey) {chestkeyText.SetActive(true); } // vfx to indicate it can be opened up
-        }
-
-        if (keyReach == true)
-        {
-            pickupText.SetActive(true);
         }
 
         if (chestReach == true)
