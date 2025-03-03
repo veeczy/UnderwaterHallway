@@ -58,7 +58,7 @@ PrefabInstance:
     - target: {fileID: 4732301286742075464, guid: ef51c84532a02a14c99ec97455ed4661, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 050aef98219b46f49a786309697a3956, type: 2}
+      objectReference: {fileID: 2100000, guid: 1253b8ebd8948ad4bb67d9967f4339cc, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef51c84532a02a14c99ec97455ed4661, type: 3}
 --- !u!1 &407029629377512559 stripped
@@ -156,6 +156,13 @@ MonoBehaviour:
   sightRange: 20
   timeBetweenAttacks: 2.3
   power: 20
+  damageSource: {fileID: 0}
+  stunParticles: {fileID: 0}
+  isStunned: 0
+  stunCooldown: 0
+  cooldownRemaining: 10
+  stunRemaining: 4.5
+  cheatOn: 0
 --- !u!195 &1694318411
 NavMeshAgent:
   m_ObjectHideFlags: 0

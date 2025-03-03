@@ -20,8 +20,16 @@ public class MenuManager : MonoBehaviour
     public bool winCondition;
     public GameObject player;
     public bool loseCondition;
-    //public AudioSource winSource;
-    //public AudioSource loseSource;
+    public AudioSource bgmSource;
+
+    //health bar variables
+    public int currentHealth;
+    public GameObject healthIndicator;
+    public GameObject health1; //20 health
+    public GameObject health2; //40 health
+    public GameObject health3; //60 health
+    public GameObject health4; //80 health
+    public GameObject health5; //100 health (full)
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +48,7 @@ public class MenuManager : MonoBehaviour
 
         winCondition = key.GetComponent<keyScript>().winCondition;
         loseCondition = player.GetComponent<PlayerHealth>().loseCondition;
+        currentHealth = player.GetComponent<PlayerHealth>().currentHealth;
     }
 
     void Update()
@@ -64,12 +73,22 @@ public class MenuManager : MonoBehaviour
         if (key.GetComponent<keyScript>().winCondition)
         {
             WinScreen();
+            bgmSource.Stop();
         }
 
         if (player.GetComponent<PlayerHealth>().loseCondition)
         {
             LoseScreen();
+            bgmSource.Stop();
         }
+
+        //health bar
+        if (player.GetComponent<PlayerHealth>().currentHealth <= 80) { health5.SetActive(false); } 
+        if (player.GetComponent<PlayerHealth>().currentHealth <= 60) { health4.SetActive(false); }
+        if (player.GetComponent<PlayerHealth>().currentHealth <= 40) { health3.SetActive(false); }
+        if (player.GetComponent<PlayerHealth>().currentHealth <= 20) { health2.SetActive(false); }
+        if (player.GetComponent<PlayerHealth>().currentHealth <= 0) { health1.SetActive(false); }
+
     }
 
     public void ResumeGame()
@@ -84,6 +103,7 @@ public class MenuManager : MonoBehaviour
         optionsMenu.SetActive(false);
         pauseMenu.SetActive(false);
         equipment.SetActive(false);
+        healthIndicator.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -188,6 +208,7 @@ public class MenuManager : MonoBehaviour
     {
         CloseMenus();
         equipment.SetActive(true);
+        healthIndicator.SetActive(true);
     }
 
     public void RestartGame()
